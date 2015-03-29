@@ -269,7 +269,7 @@
     (log/debugf "Writing to variable %s. Metadata: %s, parent %s"
                 var-name (pr-str metadata) (pr-str parent-metadata))
     (cp/upfor
-     (cp/threadpool cp/ncpus)
+     (cp/threadpool (cp/ncpus))
      [s slabs]
      (log/debugf "Writing slice %s for variable: %s"
                  (pr-str (:slice s)) var-name)

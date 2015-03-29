@@ -1,5 +1,5 @@
 (ns io.mandoline.utils
-  (:require [claypoole.core ] [clojure.tools.logging :as log]
+  (:require [clojure.tools.logging :as log]
             [clojure.string :as string]
             [cheshire.core :as json]
             [cheshire.factory :as factory]
@@ -10,7 +10,7 @@
            [java.util.concurrent Executors Callable Future]
            [com.google.common.io Files]))
 
-(def nthreads cp/ncpus)
+(def nthreads (cp/ncpus))
 (defonce mandoline-thread-pool (cp/threadpool nthreads))
 
 (defmacro instrument
