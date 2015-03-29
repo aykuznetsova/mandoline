@@ -1,6 +1,6 @@
 (ns io.mandoline.impl
   (:require
-   [claypoole.core :as cp]
+   [com.climate.claypoole :as cp]
    [clojure.set :as cset]
    [clojure.string :as string]
    [clojure.tools.logging :as log]
