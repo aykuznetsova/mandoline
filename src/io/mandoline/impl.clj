@@ -1,5 +1,6 @@
 (ns io.mandoline.impl
   (:require
+   [claypoole.core :as cp]
    [clojure.set :as cset]
    [clojure.string :as string]
    [clojure.tools.logging :as log]
@@ -267,12 +268,14 @@
                                    store coordinate slab))]
     (log/debugf "Writing to variable %s. Metadata: %s, parent %s"
                 var-name (pr-str metadata) (pr-str parent-metadata))
-    (doseq [s slabs]
-      (log/debugf "Writing slice %s for variable: %s"
+    (cp/upfor
+     (cp/threadpool cp/ncpus)
+     [s slabs]
+     (log/debugf "Writing slice %s for variable: %s"
                  (pr-str (:slice s)) var-name)
-      (->> (variable/get-chunk-grid-slice metadata var-name)
-           (chunk/to-chunk-coordinate (:slice s))
-           ;; todo make number of threads configurable
-           (utils/npmap (partial update-fn s))
-           (dorun)))
+     (->> (variable/get-chunk-grid-slice metadata var-name)
+          (chunk/to-chunk-coordinate (:slice s))
+          ;; todo make number of threads configurable
+          (utils/npmap (partial update-fn s))
+          (dorun)))
     true))

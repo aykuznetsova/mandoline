@@ -1,5 +1,5 @@
 (ns io.mandoline.utils
-  (:require [clojure.tools.logging :as log]
+  (:require [claypoole.core ] [clojure.tools.logging :as log]
             [clojure.string :as string]
             [cheshire.core :as json]
             [cheshire.factory :as factory]
@@ -10,7 +10,7 @@
            [java.util.concurrent Executors Callable Future]
            [com.google.common.io Files]))
 
-(def nthreads 24)
+(def nthreads cp/ncpus)
 (defonce mandoline-thread-pool (cp/threadpool nthreads))
 
 (defmacro instrument
@@ -76,7 +76,7 @@
 
 (def npmap
   "Unlike pmap, we use a local thread pool (IO bounded)."
-  (partial cp/pmap mandoline-thread-pool))
+  (partial cp/upmap mandoline-thread-pool))
 
 (defprotocol VersionFilter
   (committed? [_ version-id]))
